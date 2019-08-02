@@ -8,18 +8,8 @@ import { Router } from '@angular/router';
   styleUrls: ['tab3.page.scss']
 })
 export class Tab3Page {
-  headimage = './assets/images/tahoe.jpg';
 
-  zoom = 8;
-  mapviews: { lat: number; lng: number; }[];
+  constructor() {
+  }
 
-  constructor(public serviceProvider: TahoeService, public route: Router) {
-    this.mapviews = this.serviceProvider.mapsList;
-    console.log(this.mapviews);
-  }
-  goToFullView(LatLng: any) {
-    this.route.navigate(['mapdetail', LatLng]);
-    // const modal = await this.serviceProvider.goForModal(MapfullComponent, LatLng);
-    // await modal.present();
-  }
 }

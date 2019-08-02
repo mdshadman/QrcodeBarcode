@@ -8,8 +8,6 @@ import { BarcodeScanner, BarcodeScannerOptions } from '@ionic-native/barcode-sca
   styleUrls: ['tab1.page.scss']
 })
 export class Tab1Page {
-  parks: { image: string; title: string; subTitle: string; }[];
-  headimage = '../../assets/images/tahoe.jpg';
   scannedData: any;
   encodedData = '';
   constructor(public barcodeCtrl: BarcodeScanner) { }
