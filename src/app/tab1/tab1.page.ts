@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { BarcodeScanner, BarcodeScannerOptions } from '@ionic-native/barcode-scanner/ngx';
+import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
+// import { BarcodeScanner, BarcodeScannerOptions } from '@ionic-native/barcode-scanner/ngx';
 
 
 @Component({
@@ -12,38 +13,35 @@ export class Tab1Page {
   headimage = '../../assets/images/tahoe.jpg';
   scannedData: any;
   encodedData = '';
-  constructor(public barcodeCtrl: BarcodeScanner) { }
-  goToBarcodeScan() {
-    const options: BarcodeScannerOptions = {
-      preferFrontCamera: false,
-      showFlipCameraButton: true,
-      showTorchButton: true,
-      torchOn: false,
-      prompt: 'Place a barcode inside the scan area',
-      resultDisplayDuration: 500,
-      formats: 'QR_CODE,PDF_417 ',
-      orientation: 'landscape',
-    };
+  QRSCANNED_DATA: string;
+  constructor(public qrScanCtrl: QRScanner) { }
 
-    this.barcodeCtrl.scan(options).then(barcodeData => {
-      console.log('Barcode data', barcodeData);
-      this.scannedData = barcodeData;
+  goToQrScan() {
+    this.qrScanCtrl.prepare()
+      .then((status: QRScannerStatus) => {
+        if (status.authorized) {
+          // camera permission was granted
 
-    }).catch(err => {
-      console.log('Error', err);
-    });
+
+          // start scanning
+          const scanSub = this.qrScanCtrl.scan().subscribe((text: string) => {
+            console.log('Scanned something', text);
+            this.QRSCANNED_DATA = text;
+            this.qrScanCtrl.hide(); // hide camera preview
+            scanSub.unsubscribe(); // stop scanning
+          });
+
+        } else if (status.denied) {
+          // camera permission was permanently denied
+          // you must use QRScanner.openSettings() method to guide the user to the settings page
+          // then they can grant the permission from there
+        } else {
+          // permission was denied, but not permanently. You can ask for permission again at a later time.
+        }
+      })
+      .catch((e: any) => console.log('Error is', e));
   }
 
-
-
-  goToCreateCode() {
-    this.barcodeCtrl.encode(this.barcodeCtrl.Encode.TEXT_TYPE, this.encodedData).then((encodedData) => {
-      console.log(encodedData);
-      this.encodedData = encodedData;
-    }, (err) => {
-      console.log('Error occured : ' + err);
-    });
-  }
 
 }
 

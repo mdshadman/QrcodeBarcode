@@ -14,13 +14,13 @@
     <img src="/assets/scan.jpeg" alt="" />
     <ion-card-header>
       <ion-card-subtitle>Get Started</ion-card-subtitle>
-      <ion-card-title> QR Code and Barcode </ion-card-title>
+      <ion-card-title> QR Code Scan </ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <p>Here we can scan a Qr code or Barcode to get data and we will also see how to generate Barcode.</p>
+      <p>A fast, energy efficient, highly-configurable QR code scanner for Cordova apps.</p>
     </ion-card-content>
-    <ion-button expand='block' margin (click)="goToBarcodeScan()">Click to scan a barcode</ion-button>
-    <div *ngIf="scannedData">
+    <ion-button expand='block' margin (click)="goToQrScan()">Click to scan a barcode</ion-button>
+    <div *ngIf="QRSCANNED_DATA">
       <p>
         Scanned Code Text : <b>{{ scannedData["text"] }}</b>
       </p>
