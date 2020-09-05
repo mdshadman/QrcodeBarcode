@@ -7,6 +7,10 @@ export class TahoeService {
   segValue = 'contact';
   constructor() { }
 
+  constructor(public modalCtrl: ModalController) { }
+
+
+
 }
 
 
