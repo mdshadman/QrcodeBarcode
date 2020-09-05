@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { BarcodeScanner, BarcodeScannerOptions } from '@ionic-native/barcode-scanner/ngx';
+import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
 
 
 @Component({
@@ -8,39 +8,47 @@ import { BarcodeScanner, BarcodeScannerOptions } from '@ionic-native/barcode-sca
   styleUrls: ['tab1.page.scss']
 })
 export class Tab1Page {
-  scannedData: any;
   encodedData = '';
-  constructor(public barcodeCtrl: BarcodeScanner) { }
-  goToBarcodeScan() {
-    const options: BarcodeScannerOptions = {
-      preferFrontCamera: false,
-      showFlipCameraButton: true,
-      showTorchButton: true,
-      torchOn: false,
-      prompt: 'Place a barcode inside the scan area',
-      resultDisplayDuration: 500,
-      formats: 'QR_CODE,PDF_417 ',
-      orientation: 'landscape',
-    };
+  QRSCANNED_DATA: string;
+  isOn = false;
+  scannedData: {};
+  constructor(public qrScanCtrl: QRScanner) { }
 
-    this.barcodeCtrl.scan(options).then(barcodeData => {
-      console.log('Barcode data', barcodeData);
-      this.scannedData = barcodeData;
+  goToQrScan() {
+    this.qrScanCtrl.prepare()
+      .then((status: QRScannerStatus) => {
+        if (status.authorized) {
+          // camera permission was granted
+          this.isOn = true;
 
-    }).catch(err => {
-      console.log('Error', err);
-    });
+
+          // start scanning
+          const scanSub = this.qrScanCtrl.scan().subscribe((text: string) => {
+            console.log('Scanned something', text);
+            this.isOn = false;
+
+            this.QRSCANNED_DATA = text;
+            if (this.QRSCANNED_DATA !== '') {
+              this.closeScanner();
+              scanSub.unsubscribe();
+            }
+
+          });
+          this.qrScanCtrl.show();
+
+        } else if (status.denied) {
+          console.log('camera permission denied');
+          this.qrScanCtrl.openSettings();
+        } else {
+        }
+      })
+      .catch((e: any) => console.log('Error is', e));
   }
 
-
-
-  goToCreateCode() {
-    this.barcodeCtrl.encode(this.barcodeCtrl.Encode.TEXT_TYPE, this.encodedData).then((encodedData) => {
-      console.log(encodedData);
-      this.encodedData = encodedData;
-    }, (err) => {
-      console.log('Error occured : ' + err);
-    });
+  closeScanner() {
+    this.isOn = false;
+    this.qrScanCtrl.hide();
+    this.qrScanCtrl.destroy();
   }
 
 }

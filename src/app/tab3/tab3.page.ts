@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { TahoeService } from '../tahoe.service';
-import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-tab3',
@@ -9,7 +8,10 @@ import { Router } from '@angular/router';
 })
 export class Tab3Page {
 
+
+
   constructor() {
+
   }
 
 }

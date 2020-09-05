@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { ModalController } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TahoeService {
+  segValue = 'contact';
+  constructor() { }
 
   constructor(public modalCtrl: ModalController) { }
 
